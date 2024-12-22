@@ -1,0 +1,35 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+		},
+		{
+			"path": "..\\jai"
+		},
+	],
+	"build_systems":
+	[
+		{
+			"name": "jai",
+			"working_dir": "${project_path}",
+			"file_regex": "^(..[^\\()]*):([0-9]+),?([0-9]+)?: (.*)$", // clang regex
+
+			"variants":
+			[
+				{
+					"name" : "build windows",
+					"shell_cmd" : "jai build.jai - run",
+				},
+				{
+					"name" : "build wasm",
+					"shell_cmd" : "jai build.jai - wasm",
+				},
+				{
+					"name" : "generate emscripten backend",
+					"shell_cmd" : "emcc -o emscripten_backend_export/raw_backend.html emscripten_backend_export/emscripten_backend_exporter.cpp -std=c++14 -D_DEFAULT_SOURCE -sUSE_GLFW=3 -sMEMORY64=1 -mbulk-memory -sTOTAL_MEMORY=67108864 -sMINIFY_HTML=0 -sEXPORT_ALL=1",
+				}
+			]
+		}
+	]
+}
