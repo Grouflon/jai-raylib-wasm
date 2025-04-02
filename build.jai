@@ -56,13 +56,15 @@ build_type_to_name :: (build_type: Operating_System_Tag) -> string
             // We should probably port this allocator to Jai instead…
             //  -rluba, 2023-11-15
             walloc_object_file_path := "walloc.o";
+            options.output_executable_name = tprint("%0%0064", BUILD_NAME);
+
 
             STACK_SIZE :: 24 * 1024;
             options.additional_linker_arguments = .[
                 "--stack-first", "-z", tprint("stack-size=%", STACK_SIZE),
                 "--export-table",
-                "--export-all",
-                walloc_object_file_path
+                "--export=malloc",
+                walloc_object_file_path,
             ];
 
             options.llvm_options.target_system_features = "+bulk-memory"; // "This options is needed so that "memcpy" and "memset" are mapped to "memory.copy" and "memory.fill" instructions in WASM.
@@ -126,6 +128,13 @@ build_type_to_name :: (build_type: Operating_System_Tag) -> string
             print("\n");
             log(output_string);
         }
+    }
+    else if build_type == .WASM
+    {
+        args := string.["./thirdparty/wasm64232.exe", "-o", tprint("./%1/%2%0032.wasm", output_path, BUILD_NAME), tprint("./%1/%2%0064.wasm", output_path, BUILD_NAME)];
+        log("%", args);
+        // print(tprint("%\n", cmd));
+        run_command(..args, capture_and_return_output= true, print_captured_output= true);
     }
 }
 
