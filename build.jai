@@ -1,4 +1,4 @@
-BUILD_NAME :: "wasm-playground";
+BUILD_NAME :: "jai-raylib-wasm";
 BUILD_OUTPUT_ROOT :: "bin";
 
 build_type_to_name :: (build_type: Operating_System_Tag) -> string
@@ -56,7 +56,7 @@ build_type_to_name :: (build_type: Operating_System_Tag) -> string
             // We should probably port this allocator to Jai instead…
             //  -rluba, 2023-11-15
             walloc_object_file_path := "walloc.o";
-            options.output_executable_name = tprint("%0%0064", BUILD_NAME);
+            // options.output_executable_name = tprint("%0%0064", BUILD_NAME);
 
 
             STACK_SIZE :: 24 * 1024;
@@ -64,6 +64,7 @@ build_type_to_name :: (build_type: Operating_System_Tag) -> string
                 "--stack-first", "-z", tprint("stack-size=%", STACK_SIZE),
                 "--export-table",
                 "--export=malloc",
+                "--export-all",
                 walloc_object_file_path,
             ];
 
@@ -131,10 +132,9 @@ build_type_to_name :: (build_type: Operating_System_Tag) -> string
     }
     else if build_type == .WASM
     {
-        args := string.["./thirdparty/wasm64232.exe", "-o", tprint("./%1/%2%0032.wasm", output_path, BUILD_NAME), tprint("./%1/%2%0064.wasm", output_path, BUILD_NAME)];
-        log("%", args);
-        // print(tprint("%\n", cmd));
-        run_command(..args, capture_and_return_output= true, print_captured_output= true);
+        // args := string.["./thirdparty/wasm64232.exe", "-o", tprint("./%1/%2%0032.wasm", output_path, BUILD_NAME), tprint("./%1/%2%0064.wasm", output_path, BUILD_NAME)];
+        // log("%", args);
+        // run_command(..args, capture_and_return_output= true, print_captured_output= true);
     }
 }
 

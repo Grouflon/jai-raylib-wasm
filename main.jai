@@ -24,7 +24,7 @@ main :: ()
 
     rl.InitWindow(800, 600, "raylib example");
     rl.SetTargetFPS(60);
-    return;
+    // return;
 
     #if OS == .WASM
     {
@@ -35,7 +35,7 @@ main :: ()
     {
         while !rl.WindowShouldClose()
         {
-            update();
+            update(0);
         }
     }
 
